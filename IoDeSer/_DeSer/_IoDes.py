@@ -1,4 +1,6 @@
 import inspect
+from IoDeSer.Errors.TypeErrors import *
+from IoDeSer.Errors.ClassErrors import *
 
 
 class _IoDes:
@@ -11,6 +13,7 @@ class _IoDes:
         if objType in primitive:
             obj = objType(ioStr)
         elif objType is list:  # TODO
+            raise TypeNotImplementedError(list)
             ioStr = _IoDes.__delete_tabs(ioStr)
             lst = []
             lines = ioStr.split('\n+\n')
@@ -19,13 +22,12 @@ class _IoDes:
                 # TODO convert to proper element type, not 'str'
             obj = lst
         elif objType is tuple:
-            raise NotImplementedError("TUPLE NOT IMPLEMENTED YET")
+            raise TypeNotImplementedError(tuple)
         elif inspect.isclass(objType):  # TODO
             try:
                 obj = objType()
             except TypeError:
-                raise TypeError(
-                    "Object of type " + str(objType) + " must have parameterless constructor or with default values.")
+                raise ConstructorError(f"Object of type {objType} must have parameterless constructor or with default values.")
             ioStr = _IoDes.__delete_tabs(ioStr)
             fields = vars(obj)
 
@@ -41,7 +43,7 @@ class _IoDes:
                         break
 
                 if foundField is None:
-                    raise NameError(f"Object of type {objType} does not have field named {varName}.")
+                    raise FieldNotFoundError(objType, varName)
 
                 if isinstance(fields[foundField], primitive):
                     typeOfElement = type(fields[foundField])

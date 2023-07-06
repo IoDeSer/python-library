@@ -1,6 +1,6 @@
 import collections.abc
 import inspect
-
+from IoDeSer.Errors.TypeErrors import *
 
 class _IoSer:
     @staticmethod
@@ -14,6 +14,7 @@ class _IoSer:
     def write(obj, shift_number) -> str:
         primitive = (int, str, bool, float)
         ret = ""
+
         if isinstance(obj, primitive):
             ret = "|" + str(obj) + "|"
         elif isinstance(obj, collections.abc.Sequence):
@@ -36,6 +37,6 @@ class _IoSer:
                 classRet += _IoSer.__add_shift(shift_number + 1) + field + "->" + _IoSer.write(value, shift_number + 1)
             ret = "|\n" + classRet + "\n" + _IoSer.__add_shift(shift_number) + "|"
         else:
-            raise NotImplementedError(f"Object of type {type(obj)} is not supported.")
+            raise TypeNotSupportedError(type(obj))
 
         return ret
