@@ -11,6 +11,60 @@ Repository stores code for python library that allows to read from and write to 
       
 ### Deserialization
 - [X] Primitive types (int, str)
-- [ ] Classes
-- [ ] Sequence subclasses (for e.g. list - returns list, but each element has type 'str')
+- [X] Classes
+- [ ] Sequence subclasses (only type 'list' works)
+- [X] Combinations of all above
 - [ ] Dictionaries
+
+
+## Disadvantages
+While primitive types or classes with clearly defined types work great with this format, more generic variables such as sequences or maps cause tremendous problems, as their element types are not known.
+
+Because of this, all custom classes that the user wants to serialize or deserialize in the .io file format need to inherit the abstract class 'IoDeserable' and implement the 'io' method, which maps all variable types in a dictionary as follows:
+- {"primitive_type": int}
+- {"other_class": Class2}
+- {"list_type": [int]} (The square brackets ***[]*** indicate that this field is a list, and ***int*** indicates the list element type)
+
+It becomes more understandable after examining the example below.
+
+### Example
+
+```python
+from IoDeSer.ClassHelper.IoDeSeriable import IoDeSerable
+from IoDeSer.io import IoFile
+
+
+class Address(IoDeSerable):
+    @staticmethod
+    def __io__() -> dict:
+        return {"city": str, "number": int}
+
+    def __init__(self, city="", number=0):
+        self.city = city
+        self.number = number
+
+    def __str__(self):
+        return f"{self.city} {self.number}"
+
+
+class Person(IoDeSerable):
+    @staticmethod
+    def __io__() -> dict:
+        return {"name": str, "last_name": str, "age": int, "addresses": [Address]}
+
+    def __init__(self, first_name="", last_name="", age=0, addresses=[]):
+        self.name = first_name
+        self.last_name = last_name
+        self.age = age
+        self.addresses = addresses
+
+    def __str__(self):
+        return f"{self.name} {self.last_name} {self.age}. " + ' '.join(map(lambda x: '\n\t' + str(x), self.addresses))
+
+
+person = Person("Jan", "Kowalski", 18, [Address("London", 13), Address("Zurich", 55)])
+io = IoFile.write_to_string(person)
+print(io)
+person = IoFile.read_from_str(io, Person)
+print(person)
+```

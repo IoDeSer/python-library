@@ -1,7 +1,7 @@
 from typing import TextIO, Type
 
-from IoDeSer._DeSer._IoDes import _IoDes
-from IoDeSer._DeSer._IoSer import _IoSer
+from IoDeSer.__DeSer.__IoDes import IoDes
+from IoDeSer.__DeSer.__IoSer import IoSer
 
 
 class IoFile:
@@ -33,16 +33,17 @@ class IoFile:
         Returns:
             Str in .io file format.
         """
-        return _IoSer.write(obj, 0)
+        return IoSer.write(obj, 0)
 
     @staticmethod
-    def read_from_file(file: TextIO, object_type: Type) -> object:
+    def read_from_file(file: TextIO, object_type: Type, elements_type: Type = None) -> object:
         """
         Reads the content of provided file in .io file format and deserializes it to type 'object_type'.
 
         Args:
             file: File from which deserialized object will be read.
             object_type: The type of object that will be deserialized from 'ioStr'.
+            elements_type: The type of objects inside lists or dictionaries.
 
         Raises:
             TypeNotImplementedError: If deserialization of provided type is not yet implemented in this version.
@@ -52,16 +53,17 @@ class IoFile:
         Returns:
             Object of type 'object_type'.
         """
-        return IoFile.read_from_str(file.read(), object_type)
+        return IoFile.read_from_str(file.read(), object_type, elements_type)
 
     @staticmethod
-    def read_from_str(io_str: str, object_type: Type) -> object:
+    def read_from_str(io_str: str, object_type: Type, elements_type: Type = None) -> object:
         """
         Reads the content of provided 'ioStr' string in .io file format and deserializes it to type 'object_type'.
 
         Args:
-            ioStr: Serialized object in .io file format.
+            io_str: Serialized object in .io file format.
             object_type: The type of object that will be deserialized from 'ioStr'.
+            elements_type: The type of objects inside lists or dictionaries.
 
         Raises:
             TypeNotImplementedError: If deserialization of provided type is not yet implemented in this version.
@@ -71,4 +73,4 @@ class IoFile:
         Returns:
             Object of type 'object_type'.
         """
-        return _IoDes.read(io_str, object_type)
+        return IoDes.read(io_str, object_type, elements_type)
