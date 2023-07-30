@@ -30,8 +30,8 @@ It becomes more understandable after examining the example below.
 ### Example
 
 ```python
-from IoDeSer.ClassHelper.IoDeSeriable import IoDeSerable
-from IoDeSer.io import IoFile
+from ioDeSer.ioDeSeriable import IoDeSerable
+from ioDeSer import ioFile
 
 
 class Address(IoDeSerable):
@@ -63,8 +63,8 @@ class Person(IoDeSerable):
 
 
 person = Person("Jan", "Kowalski", 18, [Address("London", 13), Address("Zurich", 55)])
-io = IoFile.write_to_string(person)
+io = ioFile.write_to_string(person)
 print(io)
-person = IoFile.read_from_str(io, Person)
+person = ioFile.read_from_str(io, Person)
 print(person)
 ```

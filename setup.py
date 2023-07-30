@@ -1,9 +1,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='IoDeSer',
+    name='ioDeSer',
     packages=find_packages(),
-    version='0.4.0',
+    version='0.4.2',
     description='Python library for de/serialization of .io file format.',
     author='Io-Maciek',
     license='MIT',
