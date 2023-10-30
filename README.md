@@ -4,20 +4,20 @@ Repository stores code for python library that allows to read from and write to 
 ## Functions and plans
 ### Serialization
 - [X] Primitive types (int, str)
-- [X] Classes
+- [X] Classes *([look at classes disadvantages section](#classes-disadvantages))*
 - [X] Sequence subclasses (e.g. list, tuple)
 - [X] Combinations of all above
 - [ ] Dictionaries
       
 ### Deserialization
 - [X] Primitive types (int, str)
-- [X] Classes
+- [X] Classes *([look at classes disadvantages section](#classes-disadvantages))*
 - [ ] Sequence subclasses (only type 'list' works)
 - [X] Combinations of all above
 - [ ] Dictionaries
 
 
-## Disadvantages
+## Classes disadvantages
 While primitive types or classes with clearly defined types work great with this format, more generic variables such as sequences or maps cause tremendous problems, as their element types are not known.
 
 Because of this, all custom classes that the user wants to serialize or deserialize in the .io file format need to inherit the abstract class 'IoDeserable' and implement the 'io' method, which maps all variable types in a dictionary as follows:
